@@ -27,7 +27,7 @@ class AfricaTalkingService
                 'username' => $this->username,
                 'to' => $to,
                 'message' => $message,
-                'from' => 'sandbox',
+                'from' => 'SHELTON KHAMINWA',
             ],
         ]);
 
