@@ -26,22 +26,25 @@ class BlogPostController extends Controller
     {
         $this->smsService = $smsService;
     }
-    public function store(Request $request)  //Validating the input and save a new post to the database.
+
+    public function store(Request $request) // Validating the input and save a new post to the database.
     {
+        // Validate the incoming request data
         $request->validate([
             'title' => 'required|min:5',
             'content' => 'required',
         ]);
 
-        BlogPost::create($request->all());
-        return redirect('/blog')->with('success', 'Post created successfully!');
+        // Create the blog post in the database
+        $post = BlogPost::create($request->all());
 
-           // Send SMS notification
-           $this->smsService->sendSMS('0114547171', 'A new blog has been created!');
+        // Send SMS notification after the post is created
+        $this->smsService->sendSMS('0114547171', 'A new blog has been created!');
 
-           return redirect()->route('posts.index')->with('success', 'Post created and SMS sent!');
-       
+        // Redirect to the posts index with a success message
+        return redirect()->route('posts.index')->with('success', 'Post created successfully and SMS sent!');
     }
+
 
     public function edit($id)   //Fetch a specific post for editing.
     {
@@ -75,8 +78,8 @@ class BlogPostController extends Controller
         $post->save();
         return redirect('/blog')->with('success', 'Post publish status updated!');
     }
-    
-    
+
+
 
     // public function store(Request $request)
     // {
