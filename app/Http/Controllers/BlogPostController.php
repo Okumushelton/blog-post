@@ -37,7 +37,7 @@ class BlogPostController extends Controller
         return redirect('/blog')->with('success', 'Post created successfully!');
 
            // Send SMS notification
-           $this->smsService->sendSMS('0114547171', 'A new blog post has been created!');
+           $this->smsService->sendSMS('0114547171', 'A new blog has been created!');
 
            return redirect()->route('posts.index')->with('success', 'Post created and SMS sent!');
        
