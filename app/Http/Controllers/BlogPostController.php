@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
+use App\Services\AfricaTalkingService;
 
 class BlogPostController extends Controller
 {
@@ -18,6 +19,13 @@ class BlogPostController extends Controller
         return view('blog.create');
     }
 
+    // SMS API
+    protected $smsService;
+
+    public function __construct(AfricaTalkingService $smsService)
+    {
+        $this->smsService = $smsService;
+    }
     public function store(Request $request)  //Validating the input and save a new post to the database.
     {
         $request->validate([
@@ -27,6 +35,12 @@ class BlogPostController extends Controller
 
         BlogPost::create($request->all());
         return redirect('/blog')->with('success', 'Post created successfully!');
+
+           // Send SMS notification
+           $this->smsService->sendSMS('0114547171', 'A new blog post has been created!');
+
+           return redirect()->route('posts.index')->with('success', 'Post created and SMS sent!');
+       
     }
 
     public function edit($id)   //Fetch a specific post for editing.
@@ -61,4 +75,14 @@ class BlogPostController extends Controller
         $post->save();
         return redirect('/blog')->with('success', 'Post publish status updated!');
     }
+    
+    
+
+    // public function store(Request $request)
+    // {
+    //         // Send SMS notification
+    //     $this->smsService->sendSMS('0114547171', 'A new blog post has been created!');
+
+    //     return redirect()->route('posts.index')->with('success', 'Post created and SMS sent!');
+    // }
 }
